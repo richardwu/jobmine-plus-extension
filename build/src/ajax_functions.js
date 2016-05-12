@@ -6,7 +6,7 @@
 function initAjaxCapture() {
    BRIDGE.registerFunction("ajaxComplete", ajaxComplete);
    BRIDGE.addJS(function(){
-      net.ContentLoader.prototype.onReadyState = function() {
+      net2.ContentLoader.prototype.onReadyState = function() {
          //Some functions
          var obj = this;
          function allowResubmit(){
@@ -96,9 +96,9 @@ function initAjaxCapture() {
          }
       }
       //Override to remove usless popup
-      net.ContentLoader.prototype.finalCall = function() {
+      net2.ContentLoader.prototype.finalCall = function() {
          var shouldShowPopup = this.name.indexOf("UW_CO_SLIST_HL$") != 0 && this.name != "UW_CO_JOBSRCHDW_UW_CO_DW_SRCHBTN";
-         net.arrSrcScript=new Array();net.nScriptfiles=0;net.nScriptfileIndex=0;if(net.bScript){var n=net.arrScript.length;for(var xx=0;xx<n;xx++){if(net.arrScript[xx])this.addScript(id+"_"+xx,net.arrScript[xx]);}net.arrScript=new Array();net.bScript=false;}if(net.OnloadScriptList&&net.OnloadScriptList.length>0){for(var i=0;i<net.OnloadScriptList.length;i++){var script=net.OnloadScriptList[i].firstChild.data;if(!shouldShowPopup){script=script.replace(/self\.scroll[^;]+;/mi,"");script=script.replace(/setFocus_win0[^;]+;/mi,"");}eval(script);}}net.OnloadScriptList="";if(net.msgList&&net.msgList.length>0){this.SetInProcess(false);this.SetWaitingObject(null,"",null,false,false);if(shouldShowPopup){popupObj_win0.showMsg();}}if(shouldShowPopup){popupObj_win0.deferPrompt();}this.SetInProcess(false);if(ptGridObj_win0){ptGridObj_win0.restoreScrollPos();}if(this.bPrompt){promptFieldName=this.name;}if(ptRC.isEnabled()&&(!this.bPrompt)&&(promptFieldName.length>0)){window.top.ptrc.refreshRCOnChangeIfNeeded(promptFieldName);promptFieldName="";}if(ptRC.isEnabled()&&!this.bPrompt){window.top.ptrc.onAddChangeEvent();}ptCommonObj.generateABNSearchResults();if(this.GetWaitingICAction()!=""){var objWaiting=this.GetWaitingObject();this.SetWaitingObject(null,"",null,false,false);aAction0_win0(objWaiting.v,objWaiting.w,objWaiting.x,objWaiting.y,objWaiting.z);}
+         net2.arrSrcScript=new Array();net2.nScriptfiles=0;net2.nScriptfileIndex=0;if(net2.bScript){var n=net2.arrScript.length;for(var xx=0;xx<n;xx++){if(net2.arrScript[xx])this.addScript(id+"_"+xx,net2.arrScript[xx]);}net2.arrScript=new Array();net2.bScript=false;}if(net2.OnloadScriptList&&net2.OnloadScriptList.length>0){for(var i=0;i<net2.OnloadScriptList.length;i++){var script=net2.OnloadScriptList[i].firstChild.data;if(!shouldShowPopup){script=script.replace(/self\.scroll[^;]+;/mi,"");script=script.replace(/setFocus_win0[^;]+;/mi,"");}eval(script);}}net2.OnloadScriptList="";if(net2.msgList&&net2.msgList.length>0){this.SetInProcess(false);this.SetWaitingObject(null,"",null,false,false);if(shouldShowPopup){MOpopupObj_win0.ShowPopup();}}if(shouldShowPopup){MOpopupObj_win0.StopPopup();}this.SetInProcess(false);if(ptGridObj_win0){ptGridObj_win0.restoreScrollPos();}if(this.bPrompt){promptFieldName=this.name;}if(ptRC.isEnabled()&&(!this.bPrompt)&&(promptFieldName.length>0)){window.top.ptRC2.refreshRCOnChangeIfNeeded(promptFieldName);promptFieldName="";}if(ptRC2.isEnabled()&&!this.bPrompt){window.top.ptRC2.onAddChangeEvent();}ptCommonObj.generateABNSearchResults();if(this.GetWaitingICAction()!=""){var objWaiting=this.GetWaitingObject();this.SetWaitingObject(null,"",null,false,false);aAction0_win0(objWaiting.v,objWaiting.w,objWaiting.x,objWaiting.y,objWaiting.z);}
       }
       
    }, {commonURL: CONSTANTS.PAGESIMILAR});
