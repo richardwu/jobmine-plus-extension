@@ -226,15 +226,16 @@ function ajaxComplete(name, url, popupOccurs, dataArrayAsString) {
             $("#jbmnplsResults").removeClass("disable-links");
             var $shortlistedEL = table.jInstance.find("tr td .loading");
             
+	    // The whole .loading thing wasnt working, dunno why so I removed it and based it on last clicked row
             // Change the status of the shortlist on the table
             if ($shortlistedEL.exists()) {
-				$shortlistedEL.removeClass("loading");
-				var $parent = $shortlistedEL.parent()
-				$parent.siblings(":first").text("Shortlisted");
-				$parent.html("On Short List");
-				table.updateTable();
+		//$shortlistedEL.removeClass("loading");
+		//var $parent = $shortlistedEL.parent()
+                $shortlistedEL.find("td").eq(0).text("Shortlisted");
+                $shortlistedEL.find("td").eq(8).html("On Short List");
+		table.updateTable();
             } else {
-				alert(":(   There was an error in shortlisting, please email {{ email }} about this!");
+		alert(":(   There was an error in shortlisting, please email <insert your developer's email here> about this!");
             }
          } else if(dataArrayAsString != null && name == "UW_CO_JOBSRCH_UW_CO_LOCATION$prompt") {
             //Fills the location dropdown
