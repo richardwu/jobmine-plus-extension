@@ -2088,11 +2088,12 @@ function initAjaxCapture() {
          }
       }
 
-      //Override to remove usless popup
-      net2.ContentLoader.prototype.finalCall = function() {
-         var shouldShowPopup = this.name.indexOf("UW_CO_SLIST_HL$") != 0 && this.name != "UW_CO_JOBSRCHDW_UW_CO_DW_SRCHBTN";
-         net2.arrSrcScript=new Array();net2.nScriptfiles=0;net2.nScriptfileIndex=0;if(net2.bScript){var n=net2.arrScript.length;for(var xx=0;xx<n;xx++){if(net2.arrScript[xx])this.addScript(id+"_"+xx,net2.arrScript[xx]);}net2.arrScript=new Array();net2.bScript=false;}if(net2.OnloadScriptList&&net2.OnloadScriptList.length>0){for(var i=0;i<net2.OnloadScriptList.length;i++){var script=net2.OnloadScriptList[i].firstChild.data;if(!shouldShowPopup){script=script.replace(/self\.scroll[^;]+;/mi,"");script=script.replace(/setFocus_win0[^;]+;/mi,"");}eval(script);}}net2.OnloadScriptList="";if(net2.msgList&&net2.msgList.length>0){this.SetInProcess(false);this.SetWaitingObject(null,"",null,false,false);if(shouldShowPopup){popupObj_win0.ShowPopup();}}if(shouldShowPopup){MOpopupObj_win0.StopPopup();}this.SetInProcess(false);if(ptGridObj_win0){ptGridObj_win0.restoreScrollPos();}if(this.bPrompt){promptFieldName=this.name;}if(window.top.ptRC2.isEnabled() &&(!this.bPrompt)&&(promptFieldName.length>0)){window.top.ptCommonObj2.refreshOnChangeIfNeeded(promptFieldName);promptFieldName="";}if(window.top.ptRC2.isEnabled()&&!this.bPrompt){window.top.ptCommonObj2.onAddChangeEvent();}ptCommonObj2.generateABNSearchResults();if(this.GetWaitingICAction()!=""){var objWaiting=this.GetWaitingObject();this.SetWaitingObject(null,"",null,false,false);aAction0_win0(objWaiting.v,objWaiting.w,objWaiting.x,objWaiting.y,objWaiting.z);}
+      PT_Dialog.prototype.removeMsg = function() {
+         this.arrModalMsgs.shift();
       }
+
+      //Override to remove usless popup
+      net2.ContentLoader.prototype.finalCall = function() { var shouldShowPopup = this.name.indexOf("UW_CO_SLIST_HL$") != 0 && this.name != "UW_CO_JOBSRCHDW_UW_CO_DW_SRCHBTN"; net2.arrSrcScript= new Array(); net2.nScriptfiles=0; net2.nScriptfileIndex=0; if (net2.bScript) { var n= net2.arrScript.length; for (var xx=0; xx < n; xx++) { if (net2.arrScript[xx]) this.addScript(id+"_"+xx,net2.arrScript[xx]); } net2.arrScript = new Array(); net2.bScript = false; } if(window.ptalPageletArea || (parent && parent.ptalPageletArea)) { var pageletname=this.form.parentElement.id.slice(14); if (window.ptalPageletArea) window.ptalPageletArea.fixPageletLinksById(pageletname); else parent.ptalPageletArea.fixPageletLinksById(pageletname); } var scriptData, el; if (net2.OnloadScriptList && net2.OnloadScriptList.length>0 ) { for (var i=0; i < net2.OnloadScriptList.length; i++) { if(net2.OnloadScriptList[i].firstChild != null) scriptData = net2.OnloadScriptList[i].firstChild.data; if ((browserInfoObj2.isiPad && browserInfoObj2.isSafari) && (scriptData.indexOf('window.open') === 0)) { var scriptDataArrary= scriptData.split("'"); eval("window.location.href = '" + scriptDataArrary[1] + "'"); } else { var sTmp = scriptData.toLowerCase(); if (sTmp.indexOf('window.open') == 0 && sTmp.indexOf('http')== -1 && sTmp.indexOf('https')== -1) eval(decodeURI(scriptData)); else if (sTmp.indexOf("document.location") == -1) eval(scriptData); else if (sTmp.indexOf("document.location.href") != -1) eval(scriptData); } } } net2.OnloadScriptList=""; if (closeHideModal()){ if (this.bModal == 2) closeModal(window.modWin.modalID); else window.modWin = null; } else this.closeModal(); if (typeof ptConsole2 != 'undefined' && ptConsole2 && ptConsole2.isActive() && bPerf) { var nDuration = (new Date()).valueOf() - this.nStartResponse; var nTotalDuration = (new Date()).valueOf() - this.nStartAll; ptConsole2.append((new Date()).valueOf() + " scripts & request end. Resp: " + nDuration+" Total:"+ nTotalDuration); } if (this.sXMLResponse) { this.SetInProcess(false); this.SetWaitingObject(null,"",null,false,false); if (isAnyMsg()) playMsg(); return; } var sScript = "if (ptGridObj_"+this.formname+") ptGridObj_"+this.formname+".restoreScrollPos();"; eval(sScript); var bMessage=isAnyMsg(); if (bMessage) { this.SetInProcess(false); this.SetWaitingObject(null,"",null,false,false); if(shouldShowPopup) playMsg(); else window.top.ptDialog.arrModalMsgs.shift(); } else this.SetInProcess(false); if (this.bPrompt) promptFieldName = this.name; if ( ptRC2.isEnabled() && (!this.bPrompt) && (promptFieldName.length > 0) ) { window.top.ptrc.refreshRCOnChangeIfNeeded(promptFieldName); promptFieldName = ""; } if (ptRC2.isEnabled() && !this.bPrompt && typeof window.top.ptrc != 'undefined') window.top.ptrc.onAddChangeEvent(); ptCommonObj2.generateABNSearchResults(this.form); pm.updateMessageEvents(this.name); bcUpdater.storeKeyList(); bcUpdater.updateAdvSearchLbl(); bcUpdater.removeRemoteData(); if (this.GetWaitingICAction() != "") { var objWaiting = this.GetWaitingObject(); if (objWaiting != null) { var sScript = "aAction0_" + (objWaiting.v).name + "(objWaiting.v, objWaiting.w, objWaiting.x, objWaiting.y, objWaiting.z);"; eval(sScript); } } delete (this.req); }
    }, {commonURL: CONSTANTS.PAGESIMILAR});
 }
 
@@ -2258,8 +2259,11 @@ function ajaxComplete(name, url, popupOccurs, dataArrayAsString) {
             }
             if(!whitePopupShown || (whitePopupShown && item.isEmpty())) {
                BRIDGE.run(function(){
-                  setSaveText_win0('Saving...');
-                  submitAction_win0(document.win0, '#ICSave');
+                  // It needs a small delay or it won't work
+                  setTimeout(function() {
+                     setSaveText_win0('Saving...');
+                     submitAction_win0(document.win0, '#ICSave');
+                  }, 200);
                });
             } else {
                //Run the next job
