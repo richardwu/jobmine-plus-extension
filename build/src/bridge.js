@@ -277,7 +277,11 @@ var BRIDGE = {
             
             //Set the last callback and run
             BRIDGE.callback = callback;
-            location.href = ("javascript:" + command);
+            if (typeof unsafeWindow === "undefined") {
+                location.href = ("javascript:" + command);
+            } else {
+                unsafeWindow.location.href = ("javascript:" + command);
+            }
             item = null;
          }
       } else {

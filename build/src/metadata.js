@@ -12,6 +12,6 @@
 // @exclude        *Page=UW_CO_CT_STU_APP*
 // @exclude        *UW_CO_EMPINFO_DTLS*
 // @updateURL      {{ upload_link }}
-// @grant          GM_getValue
+// @grant          GM_getValue, unsafeWindow
 // @version        {{ version }}
 // ==/UserScript==

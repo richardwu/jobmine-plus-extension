@@ -12,7 +12,7 @@
 // @exclude        *Page=UW_CO_CT_STU_APP*
 // @exclude        *UW_CO_EMPINFO_DTLS*
 // @updateURL      https://raw.githubusercontent.com/matthewn4444/jobmine-plus-extension/master/jobmine_plus.user.js
-// @grant          GM_getValue
+// @grant          GM_getValue, unsafeWindow
 // @version        2.1.7
 // ==/UserScript==
 /*===============================*\
@@ -651,7 +651,11 @@ var BRIDGE = {
             
             //Set the last callback and run
             BRIDGE.callback = callback;
-            location.href = ("javascript:" + command);
+            if (typeof unsafeWindow === "undefined") {
+                location.href = ("javascript:" + command);
+            } else {
+                unsafeWindow.location.href = ("javascript:" + command);
+            }
             item = null;
          }
       } else {
