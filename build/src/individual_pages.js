@@ -483,10 +483,6 @@ switch (PAGEINFO.TYPE) {
       initRowDeletion();
       initDraggable();
       
-      //Update stuff
-      addUpdateMessage();
-      $("head").append("<link href='"+LINKS.UPDATE_CSS+"' type='text/css' rel='stylesheet'/>");
-      
       //Append an iframe for whatever reasons needed for it
       $("body").append("<iframe id='slave' style='display:none;visibility:hidden;' width='0'height='0' src='about:blank'></iframe>");
       

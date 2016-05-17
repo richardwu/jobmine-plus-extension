@@ -37,8 +37,6 @@ var LINKS = {
    BLANK       : "about:blank",
    EMPLYR_TOP  : "jobmine.ccol.uwaterloo.ca/psp/ES",
    EMPLYR_FRAME: "jobmine.ccol.uwaterloo.ca/psc/ES",
-   UPDATE_LINK : "{{ upload_link }}",
-   UPDATE_CSS  : "{{ update_css }}",
    ANDROID_APP : "{{ android_link }}",
    WORK_TERM   : null,     //Will set later
 };

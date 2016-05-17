@@ -732,23 +732,17 @@ var CSSOBJ = {
       "background"      :  "#fafafa",
       "text-align"      :  "center",
    },
-   "#jbmnplsMessage, #jbnplsUpdate .update-link:hover" : {
+   "#jbmnplsMessage" : {
       'color'           :  '#777',
    },
-   "#jbnplsUpdate" : {
-      "position"        :  "fixed",
-      top               :  0,
-      left              :  0,
-      "z-index"         :  "998",
-   },
-   "#jbmnplsMessage *, #jbnplsUpdate *" : {
+   "#jbmnplsMessage *" : {
       "font-family"     :  "Verdana, Arial",
       "font-size"       :  "12px",
       "color"           :  "#222",
       "padding"         :  "7px",
       "display"         :  "block",
    },
-   "#jbmnplsMessage div.close, #jbnplsUpdate div.close" : {
+   "#jbmnplsMessage div.close" : {
       "background"      :  "no-repeat 100% 50% url('"+IMAGES.MESSAGE_CLOSE+"')",
       "position"        :  "absolute",
       "top"             :  "8px",
@@ -760,16 +754,7 @@ var CSSOBJ = {
       "padding-right"   :  "20px",
       "font-size"       :  "10px",
    },
-   "#jbmnplsPopup[name='jobmine_plus_is_updated!'] #jbmnplsPopupBody" : {
-      'height'          :  '200px !important',
-      'padding'         :  '10px',
-   },
-   "#jbmnplsPopup[name='jobmine_plus_is_updated!'] span.submit,\
-    #jbmnplsPopup[name='jobmine_plus_is_updated!'] span.save,\
-    #jbmnplsPopup[name='jobmine_plus_is_updated!'] span.cancel" : {
-      'display'         :  'none',
-   },
-   
+
    /**
     *    Jobmine Plus Settings
     */

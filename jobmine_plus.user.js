@@ -29,11 +29,11 @@ var CONSTANTS = {
    SEARCH_DAYS_CLEAR    : 30,  //30 days before ids will clear out
    STATUS_UPDATE_TIME   : 10,  //10 mins
    RESUME_DELIMITOR1    : "{|||}",
-   RESUME_DELIMITOR2    : "[|||]"
+   RESUME_DELIMITOR2    : "[|||]",
 };
 
 var DIMENSIONS = {
-   SCROLLBAR_WIDTH : 17    //Firefox and Chrome, errors when trying to calculate it
+   SCROLLBAR_WIDTH : 17,    //Firefox and Chrome, errors when trying to calculate it
 }
 
 var LINKS = {
@@ -53,8 +53,6 @@ var LINKS = {
    BLANK       : "about:blank",
    EMPLYR_TOP  : "jobmine.ccol.uwaterloo.ca/psp/ES",
    EMPLYR_FRAME: "jobmine.ccol.uwaterloo.ca/psc/ES",
-   UPDATE_LINK : "https://raw.githubusercontent.com/matthewn4444/jobmine-plus-extension/master/jobmine_plus.user.js",
-   UPDATE_CSS  : "https://googledrive.com/host/0B8D5PyLxHOt8eG11VEpRcmJRVjg",
    ANDROID_APP : "https://play.google.com/store/apps/details?id=com.jobmineplus.mobile",
    WORK_TERM   : null,     //Will set later
 };
@@ -66,7 +64,7 @@ var NAVIGATION = {   //The order below will be on the left side
                      LIST           : "Job Short List",
                      APPLICATIONS   : "Applications",
                      INTERVIEWS     : "Interviews",
-                     RANKINGS       : "Rankings"
+                     RANKINGS       : "Rankings",
                   };
 
 var COLOURS = {
@@ -79,7 +77,7 @@ var COLOURS = {
    BAD                  : "#f4baba",
    AVERAGE              : "#fffe93",
    WORST                : "#AAAAAA",
-   GOOD                 : "#a1f6cd"
+   GOOD                 : "#a1f6cd",
 };
 
 var OBJECTS = {
@@ -99,14 +97,14 @@ var LARGESTRINGS = {
 var KEYS = {
    ESCAPE   :  27,
    PERIOD   :  190,
-   DASH     :  109
+   DASH     :  109,
 };
 
 var INPUT_RESTRICTIONS = {
    DECIMALS          : function(a){return UTIL.isNumeric(String.fromCharCode(a)) || a == KEYS.PERIOD || a == KEYS.DASH;},
    POSITIVE_DECIMALS : function(a){return UTIL.isNumeric(String.fromCharCode(a)) || a == KEYS.PERIOD;},
    INTEGERS          : function(a){return UTIL.isNumeric(String.fromCharCode(a)) || a == KEYS.DASH;},
-   POSITIVE_INTEGERS : function(a){return UTIL.isNumeric(String.fromCharCode(a));}
+   POSITIVE_INTEGERS : function(a){return UTIL.isNumeric(String.fromCharCode(a));},
 };
 }
 var IMAGES = {
@@ -1376,21 +1374,6 @@ function closeMessage() {
       message.removeAttr("time");
    }
 }
-//Update Message
-function addUpdateMessage() {
-   if(UTIL.idExists("jbnplsUpdate")) {return;}
-   var message = "You are using an old version of Jobmine Plus, click to update";
-   $(document.body).append("<div style='display:none;' id='jbnplsUpdate'>\
-        <a title='You know you want to click this' class='update-link' style='margin:0 auto;width:700px;' target='_blank' href='"+LINKS.UPDATE_LINK+"'>\
-            " + message + "</a><div onclick='this.parentNode.style.visibility=\"hidden\";' class='close'></div></div>");
-   if (PAGEINFO.BROWSER !== BROWSER.CHROME ) {
-       $("#jbnplsUpdate a").one('click',function(){
-          $(this).parent().css("visibility", "hidden");
-          showPopup(true, "If you actually updated, you will see all the changes when you refresh this page.", "Jobmine Plus is Updated!", 300);
-          $(document).unbind("keydown");
-       });
-   }
-}
 
 /**
  *    Handles customizing tables on the page
@@ -1482,9 +1465,9 @@ function initRowDeletion() {
          tr.parent().find("div.delete").attr("disabled", "disabled");
          obj.addClass("loading").removeAttr("disabled");
          var row = tr.attr("row");
-         var command = obj.attr("action");
+         var command = obj.attr("action");  
          //Run the deletion
-         var deletion = new Job("DeleteCheck2_win0('" + command + "')", [row]);
+         var deletion = new Job("submitAction_win0(document.win0, '" + command + "')", [row]);
          JOBQUEUE.addJob(deletion);
       }
    });
@@ -1717,7 +1700,7 @@ function invokeRefreshTimer() {
          if ($submitButton.exists()) {
             BRIDGE.run(function(){
                var win = document.getElementById('jbmnplsPopupFrame').contentWindow;
-               win.submitAction_win0(win.document.win0,'UW_CO_APPWRK_UW_CO_CONFIRM_APP', 0, 0, 'Submit Application', false, true); 
+               win.hAction_win0(win.document.win0,'UW_CO_APPWRK_UW_CO_CONFIRM_APP', 0, 0, 'Submit Application', false, true); 
             });
          } else {
             // Runs a message saying to select or upload a resume.
@@ -1997,18 +1980,14 @@ function initAjaxCapture() {
       net2.ContentLoader.prototype.onReadyState = function() {
          //Some functions
          var obj = this;
-
-         function allowResubmit() {
+         function allowResubmit(){
             obj.form.ICResubmit.value = "0";
             nResubmit = 0;
-            obj.SetInProcess(false);
+            obj.SetInProcess(false); 
          }
-
-         Array.prototype.last = function () {
-            if (this.length == 0) {
-               return null;
-            }
-            return this[this.length - 1];
+         Array.prototype.last = function(){
+            if (this.length == 0) {return null;}
+            return this[this.length-1];
          }
          var req = this.req;
          var dataArrayAsString = null;
@@ -2019,47 +1998,43 @@ function initAjaxCapture() {
             var url = null;
             var text = req.responseText;
             var popupOccurs = false;
-            if (name.indexOf("hexcel") != -1) {
-               try {
-                  var start = text.indexOf(";window.open('" + commonURL + "?cmd=viewattach&userfile=ps.xls") + 14;
+            if(name.indexOf("hexcel") != -1) { 
+               try{
+                  var start = text.indexOf(";window.open('"+commonURL+"?cmd=viewattach&userfile=ps.xls") + 14;
                   url = text.substring(start, text.indexOf("',", start));
                   allowResubmit();
                   text = null;
-               } catch (e) {
-                  alert("Excel stuff is broken: " + e);
-               }
-               /*} else if(name.indexOf("UW_CO_APPLY_HL") != -1 && document.title == "Student Interviews"){    //Not releasing for first release
-                url = req.responseText.match(/document.location='([^(';)]+)/).last();
-                allowResubmit();*/
-            } else if (name == "UW_CO_JOBSRCH_UW_CO_LOCATION$prompt") {
+               }catch(e){alert("Excel stuff is broken: "+e);}
+            /*} else if(name.indexOf("UW_CO_APPLY_HL") != -1 && document.title == "Student Interviews"){    //Not releasing for first release
+                  url = req.responseText.match(/document.location='([^(';)]+)/).last();
+                  allowResubmit();*/
+            } else if (name=="UW_CO_JOBSRCH_UW_CO_LOCATION$prompt") {
                allowResubmit();
                dataArrayAsString = [];
-               text.replace(/;">([^<]+)<\/a/gim, function (a, b) {
-                  dataArrayAsString.push(b);
-               });
+               text.replace(/;">([^<]+)<\/a/gim, function(a,b){dataArrayAsString.push(b);});
             } else if (name === "UW_CO_PDF_LINKS_UW_CO_MARKS_VIEW"
-                || name === "UW_CO_PDF_LINKS_UW_CO_WHIST_VIEW"
-                || name.indexOf("UW_CO_PDF_LINKS_UW_CO_PACKAGE_VIEW") == 0
-                || name.indexOf("UW_CO_PDF_LINKS_UW_CO_DOC_VIEW") == 0) {
-               // Handle pdf's going new tab
-               var end, start;
-               start = text.indexOf("window.open('");
-               if (start === -1) {
-                  start = text.indexOf('window.open("');
+                     ||name === "UW_CO_PDF_LINKS_UW_CO_WHIST_VIEW"
+                     ||name.indexOf("UW_CO_PDF_LINKS_UW_CO_PACKAGE_VIEW") == 0
+                     ||name.indexOf("UW_CO_PDF_LINKS_UW_CO_DOC_VIEW") == 0) {
+                  // Handle pdf's going new tab
+                  var end, start;
+                  start = text.indexOf("window.open('");
                   if (start === -1) {
-                     showMessage("Failed to retrieve PDF, please report at <insert your developer's email here>.");
-                     this.bInProcess = false;
-                     return;
+                     start = text.indexOf('window.open("');
+                     if (start === -1) {
+                        showMessage("Failed to retrieve PDF, please report at <insert your developer's email here>.");
+                        this.bInProcess = false;
+                        return;
+                     }
+                     start += ("window.open('").length;
+                     end = text.indexOf('"', start);
+                  } else {
+                     start += ("window.open('").length
+                     end = text.indexOf("'", start);
                   }
-                  start += ("window.open('").length;
-                  end = text.indexOf('"', start);
-               } else {
-                  start += ("window.open('").length
-                  end = text.indexOf("'", start);
-               }
-               url = text.substring(start, end);
-               name = "documents-pdf-download";
-               this.bInProcess = false;
+                  url = text.substring(start, end);
+                  name = "documents-pdf-download";
+                  this.bInProcess = false;
             } else if (name == "UW_CO_APPDOCWRK_UW_CO_DOC_NUM") {
                var findStart = "id='UW_CO_STU_DOCS_UW_CO_DOC_DESC'>",
                    findEnd = "</span>",
@@ -2079,11 +2054,11 @@ function initAjaxCapture() {
                   dataArrayAsString.push(true);
                }
                this.onload.call(this);
-            } else if (name.indexOf("UW_CO_JOBTITLE_HL$") != -1) {		// Does nothing with the request
-               allowResubmit();										// need this because it will fix random errors on search
+			} else if (name.indexOf("UW_CO_JOBTITLE_HL$") != -1) {		// Does nothing with the request
+				allowResubmit();										// need this because it will fix random errors on search
             } else {
                //Run and parse
-               if (name == "TYPE_COOP") {
+               if(name == "TYPE_COOP") {
                   popupOccurs = text.indexOf("popupText") != -1;
                }
                this.onload.call(this);
@@ -2091,11 +2066,6 @@ function initAjaxCapture() {
             ajaxComplete(name, url, popupOccurs, dataArrayAsString);
          }
       }
-
-      PT_Dialog.prototype.removeMsg = function() {
-         this.arrModalMsgs.shift();
-      }
-
       //Override to remove usless popup
       net2.ContentLoader.prototype.finalCall = function() { var shouldShowPopup = this.name.indexOf("UW_CO_SLIST_HL$") != 0 && this.name != "UW_CO_JOBSRCHDW_UW_CO_DW_SRCHBTN"; net2.arrSrcScript= new Array(); net2.nScriptfiles=0; net2.nScriptfileIndex=0; if (net2.bScript) { var n= net2.arrScript.length; for (var xx=0; xx < n; xx++) { if (net2.arrScript[xx]) this.addScript(id+"_"+xx,net2.arrScript[xx]); } net2.arrScript = new Array(); net2.bScript = false; } if(window.ptalPageletArea || (parent && parent.ptalPageletArea)) { var pageletname=this.form.parentElement.id.slice(14); if (window.ptalPageletArea) window.ptalPageletArea.fixPageletLinksById(pageletname); else parent.ptalPageletArea.fixPageletLinksById(pageletname); } var scriptData, el; if (net2.OnloadScriptList && net2.OnloadScriptList.length>0 ) { for (var i=0; i < net2.OnloadScriptList.length; i++) { if(net2.OnloadScriptList[i].firstChild != null) scriptData = net2.OnloadScriptList[i].firstChild.data; if ((browserInfoObj2.isiPad && browserInfoObj2.isSafari) && (scriptData.indexOf('window.open') === 0)) { var scriptDataArrary= scriptData.split("'"); eval("window.location.href = '" + scriptDataArrary[1] + "'"); } else { var sTmp = scriptData.toLowerCase(); if (sTmp.indexOf('window.open') == 0 && sTmp.indexOf('http')== -1 && sTmp.indexOf('https')== -1) eval(decodeURI(scriptData)); else if (sTmp.indexOf("document.location") == -1) eval(scriptData); else if (sTmp.indexOf("document.location.href") != -1) eval(scriptData); } } } net2.OnloadScriptList=""; if (closeHideModal()){ if (this.bModal == 2) closeModal(window.modWin.modalID); else window.modWin = null; } else this.closeModal(); if (typeof ptConsole2 != 'undefined' && ptConsole2 && ptConsole2.isActive() && bPerf) { var nDuration = (new Date()).valueOf() - this.nStartResponse; var nTotalDuration = (new Date()).valueOf() - this.nStartAll; ptConsole2.append((new Date()).valueOf() + " scripts & request end. Resp: " + nDuration+" Total:"+ nTotalDuration); } if (this.sXMLResponse) { this.SetInProcess(false); this.SetWaitingObject(null,"",null,false,false); if (isAnyMsg()) playMsg(); return; } var sScript = "if (ptGridObj_"+this.formname+") ptGridObj_"+this.formname+".restoreScrollPos();"; eval(sScript); var bMessage=isAnyMsg(); if (bMessage) { this.SetInProcess(false); this.SetWaitingObject(null,"",null,false,false); if(shouldShowPopup) playMsg(); else window.top.ptDialog.arrModalMsgs.shift(); } else this.SetInProcess(false); if (this.bPrompt) promptFieldName = this.name; if ( ptRC2.isEnabled() && (!this.bPrompt) && (promptFieldName.length > 0) ) { window.top.ptrc.refreshRCOnChangeIfNeeded(promptFieldName); promptFieldName = ""; } if (ptRC2.isEnabled() && !this.bPrompt && typeof window.top.ptrc != 'undefined') window.top.ptrc.onAddChangeEvent(); ptCommonObj2.generateABNSearchResults(this.form); pm.updateMessageEvents(this.name); bcUpdater.storeKeyList(); bcUpdater.updateAdvSearchLbl(); bcUpdater.removeRemoteData(); if (this.GetWaitingICAction() != "") { var objWaiting = this.GetWaitingObject(); if (objWaiting != null) { var sScript = "aAction0_" + (objWaiting.v).name + "(objWaiting.v, objWaiting.w, objWaiting.x, objWaiting.y, objWaiting.z);"; eval(sScript); } } delete (this.req); }
    }, {commonURL: CONSTANTS.PAGESIMILAR});
@@ -2221,18 +2191,18 @@ function ajaxComplete(name, url, popupOccurs, dataArrayAsString) {
          } else if(name.startsWith("UW_CO_SLIST_HL$")) {
             showMessage("Added job to shortlist.",3);
             $("#jbmnplsResults").removeClass("disable-links");
-            var $shortlistedEL = table.jInstance.find("tr.lastClickedRow");
-            // The whole .loading thing wasnt working, dunno why so I removed it.
-
+            var $shortlistedEL = table.jInstance.find("tr td .loading");
+            
+	    // The whole .loading thing wasnt working, dunno why so I removed it and based it on last clicked row
             // Change the status of the shortlist on the table
             if ($shortlistedEL.exists()) {
-				//$shortlistedEL.removeClass("loading");
-				//var $parent = $shortlistedEL.parent()
+		//$shortlistedEL.removeClass("loading");
+		//var $parent = $shortlistedEL.parent()
                 $shortlistedEL.find("td").eq(0).text("Shortlisted");
                 $shortlistedEL.find("td").eq(8).html("On Short List");
-				table.updateTable();
+		table.updateTable();
             } else {
-				alert(":(   There was an error in shortlisting, please email <insert your developer's email here> about this!");
+		alert(":(   There was an error in shortlisting, please email <insert your developer's email here> about this!");
             }
          } else if(dataArrayAsString != null && name == "UW_CO_JOBSRCH_UW_CO_LOCATION$prompt") {
             //Fills the location dropdown
@@ -2330,7 +2300,8 @@ function ajaxComplete(name, url, popupOccurs, dataArrayAsString) {
    }
 }
 
-}/*================================*\
+}
+/*================================*\
 |*       __SEARCH_MANAGER__       *|
 \*================================*/
 /**
@@ -2653,10 +2624,10 @@ if(PAGEINFO.TYPE == PAGES.SEARCH) {
          '-moz-box-sizing' : 'border-box',
          'box-sizing' : 'border-box',
          '-webkit-box-sizing' : 'border-box',
-         'top'          : '-5000px'
+         'top'          : '-5000px',
       },
       "#PSTAB" : {
-         'display'      : 'none'
+         'display'      : 'none',
       },  
       '#old-criteria-wrapper' : {
          'width'        : '733px',
@@ -2817,16 +2788,16 @@ if(PAGEINFO.TYPE == PAGES.SEARCH) {
          "-webkit-transition-duration" :  "1s",
          "-webkit-transition-property" :  "height",
          "-moz-transition-property" :  "height",
-         "-moz-transition-duration" :  "1s"
+         "-moz-transition-duration" :  "1s",
       },
       "#jbmnplsSearchCriteria.closed" : {
-         "height"       :  "90px"
+         "height"       :  "90px",
       },
       "#jbmnplsSearchWrapper" : {
          "bottom"       :  "0",
          "position"     :  "absolute",
          "width"        :  "inherit",
-         "z-index"      :  "1"
+         "z-index"      :  "1",
       },
       "#jbmnplsSearchCriteria #jbmnplsCloser" : {
          "position"     :  "absolute",
@@ -2836,14 +2807,14 @@ if(PAGEINFO.TYPE == PAGES.SEARCH) {
          "width"        :  "inherit",
          "height"       :  "20px",
          "background"   :  "white",
-         "z-index"      :  "2"
+         "z-index"      :  "2",
       },
       "#jbmnplsSearchCriteria #jbmnplsCloser span.fakeLink" : {
          "font-size"    :  "12px",
-         "color"        :  "#555"
+         "color"        :  "#555",
       },
       "#jbmnplsSearchCriteria #jbmnplsCloser span.fakeLink:hover" : {
-         "color"        :  "#999"
+         "color"        :  "#999",
       },
    };
    appendCSS(searchCSS);
@@ -2965,7 +2936,8 @@ if(PAGEINFO.TYPE == PAGES.SEARCH) {
       }
    }
 }
-}/*================================*\
+}
+/*================================*\
 |*            __TABLE__           *|
 \*================================*/
 /**
@@ -5100,23 +5072,17 @@ var CSSOBJ = {
       "background"      :  "#fafafa",
       "text-align"      :  "center",
    },
-   "#jbmnplsMessage, #jbnplsUpdate .update-link:hover" : {
+   "#jbmnplsMessage" : {
       'color'           :  '#777',
    },
-   "#jbnplsUpdate" : {
-      "position"        :  "fixed",
-      top               :  0,
-      left              :  0,
-      "z-index"         :  "998",
-   },
-   "#jbmnplsMessage *, #jbnplsUpdate *" : {
+   "#jbmnplsMessage *" : {
       "font-family"     :  "Verdana, Arial",
       "font-size"       :  "12px",
       "color"           :  "#222",
       "padding"         :  "7px",
       "display"         :  "block",
    },
-   "#jbmnplsMessage div.close, #jbnplsUpdate div.close" : {
+   "#jbmnplsMessage div.close" : {
       "background"      :  "no-repeat 100% 50% url('"+IMAGES.MESSAGE_CLOSE+"')",
       "position"        :  "absolute",
       "top"             :  "8px",
@@ -5128,16 +5094,7 @@ var CSSOBJ = {
       "padding-right"   :  "20px",
       "font-size"       :  "10px",
    },
-   "#jbmnplsPopup[name='jobmine_plus_is_updated!'] #jbmnplsPopupBody" : {
-      'height'          :  '200px !important',
-      'padding'         :  '10px',
-   },
-   "#jbmnplsPopup[name='jobmine_plus_is_updated!'] span.submit,\
-    #jbmnplsPopup[name='jobmine_plus_is_updated!'] span.save,\
-    #jbmnplsPopup[name='jobmine_plus_is_updated!'] span.cancel" : {
-      'display'         :  'none',
-   },
-   
+
    /**
     *    Jobmine Plus Settings
     */
@@ -5714,10 +5671,6 @@ switch (PAGEINFO.TYPE) {
       initRowDeletion();
       initDraggable();
       
-      //Update stuff
-      addUpdateMessage();
-      $("head").append("<link href='"+LINKS.UPDATE_CSS+"' type='text/css' rel='stylesheet'/>");
-      
       //Append an iframe for whatever reasons needed for it
       $("body").append("<iframe id='slave' style='display:none;visibility:hidden;' width='0'height='0' src='about:blank'></iframe>");
       
@@ -5938,7 +5891,7 @@ switch (PAGEINFO.TYPE) {
                var progress = "1/"+listToDelete.length;
                setTitle("Deleting: "+progress);
                showPopup(false, "Deleting all the short listed jobs.<br/>Progress: "+progress+"<br/><span style='color:blue;'>You can cancel by refreshing.</span><br/><br/><img src='"+IMAGES.LARGE_LOADING+"'/>", "Please Be Patient", 500, 300);
-               var deletion = new Job("DeleteCheck2_win0('" + command + "')", listToDelete);
+               var deletion = new Job("submitAction_win0(document.win0, '" + command + "')", listToDelete);
                JOBQUEUE.addJob(deletion);
             }
             

@@ -295,21 +295,6 @@ function closeMessage() {
       message.removeAttr("time");
    }
 }
-//Update Message
-function addUpdateMessage() {
-   if(UTIL.idExists("jbnplsUpdate")) {return;}
-   var message = "You are using an old version of Jobmine Plus, click to update";
-   $(document.body).append("<div style='display:none;' id='jbnplsUpdate'>\
-        <a title='You know you want to click this' class='update-link' style='margin:0 auto;width:700px;' target='_blank' href='"+LINKS.UPDATE_LINK+"'>\
-            " + message + "</a><div onclick='this.parentNode.style.visibility=\"hidden\";' class='close'></div></div>");
-   if (PAGEINFO.BROWSER !== BROWSER.CHROME ) {
-       $("#jbnplsUpdate a").one('click',function(){
-          $(this).parent().css("visibility", "hidden");
-          showPopup(true, "If you actually updated, you will see all the changes when you refresh this page.", "Jobmine Plus is Updated!", 300);
-          $(document).unbind("keydown");
-       });
-   }
-}
 
 /**
  *    Handles customizing tables on the page

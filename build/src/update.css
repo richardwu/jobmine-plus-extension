@@ -1,6 +1,0 @@
-/**
- *    Used for updating Jobmine Plus via css
- */
-body:not(.v_2_1_7) #jbnplsUpdate{
-   display : block !important; 
-}
