@@ -13,14 +13,14 @@
 // @exclude        *UW_CO_EMPINFO_DTLS*
 // @updateURL      https://raw.githubusercontent.com/matthewn4444/jobmine-plus-extension/master/jobmine_plus.user.js
 // @grant          GM_getValue, unsafeWindow
-// @version        2.1.7
+// @version        2.1.8
 // ==/UserScript==
 /*===============================*\
 |*        __CONSTANTS__          *|
 \*===============================*/
 {/*Expand to see the constants*/
 var CONSTANTS = {
-   VERSION              : "2.1.7",
+   VERSION              : "2.1.8",
    DEBUG_ON             : false,
    PAGESIMILAR          : "https://jobmine.ccol.uwaterloo.ca/psc/SS/",
    PAGESIMILARTOP       : "https://jobmine.ccol.uwaterloo.ca/psp/SS/",
