@@ -4,12 +4,12 @@
 {/*Expand to see job search criteria*/
 if(PAGEINFO.TYPE == PAGES.SEARCH) {
    function attachNewSearchFields(){
-      $("#PAGECONTAINER > .PSPAGECONTAINER").wrap("<div id='old-criteria-wrapper'>");
+      $("#win0divPAGECONTAINER > .PSPAGECONTAINER").wrap("<div id='old-criteria-wrapper'>");
    var searchCSS = {
       /**
        *    The Old Job Search Criteria
        */
-      '#PAGECONTAINER' : {
+      '#win0divPAGECONTAINER' : {
          'position'     : 'absolute',
          'width'        : '100%',
          'left'         : '0',
@@ -307,7 +307,7 @@ if(PAGEINFO.TYPE == PAGES.SEARCH) {
         
          //Finish off by searching
          BRIDGE.run(function(){
-            hAction_win0(document.win0,'UW_CO_JOBSRCHDW_UW_CO_DW_SRCHBTN', 0, 0, 'Search', false, true);
+            submitAction_win0(document.win0,'UW_CO_JOBSRCHDW_UW_CO_DW_SRCHBTN', 0, 0, 'Search', false, true);
          });
       }
    });
