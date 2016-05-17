@@ -51,7 +51,7 @@ function initAjaxCapture() {
                   if (start === -1) {
                      start = text.indexOf('window.open("');
                      if (start === -1) {
-                        showMessage("Failed to retrieve PDF, please report at {{ email }}.");
+                        showMessage("Failed to retrieve PDF, please report at a bug: {{ issues_link }}.");
                         this.bInProcess = false;
                         return;
                      }
@@ -130,7 +130,7 @@ function ajaxComplete(name, url, popupOccurs, dataArrayAsString) {
                return;
             }
          }
-         showMessage("Failed to retrieve PDF, please report at {{ email }}.");
+         showMessage("Failed to retrieve PDF, please report a bug: {{ issues_link }}.");
       });
       return;
    } else if (name == "UW_CO_APPDOCWRK_UW_CO_DOC_NUM") {
@@ -231,7 +231,7 @@ function ajaxComplete(name, url, popupOccurs, dataArrayAsString) {
                 $shortlistedEL.find("td").eq(8).html("On Short List");
 		table.updateTable();
             } else {
-		alert(":(   There was an error in shortlisting, please email <insert your developer's email here> about this!");
+		alert(":(   There was an error in shortlisting, please report an error if it hasn't been reported! {{ issues_link }}");
             }
          } else if(dataArrayAsString != null && name == "UW_CO_JOBSRCH_UW_CO_LOCATION$prompt") {
             //Fills the location dropdown

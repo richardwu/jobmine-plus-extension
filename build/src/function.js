@@ -105,7 +105,7 @@ function addHeader() {
       }
    }
    BRIDGE.registerFunction("showAbout", function(){
-      showPopup(true, "<h1>Jobmine Plus Version "+CONSTANTS.VERSION+"</h1><br/>Hey there!<br/><br/>This is Matthew Ng the creator of Jobmine Plus. I am a System Designs Engineering Student at the University of Waterloo. I created this because Jobmine is not user friendly so this addon/extension should speed things up.<br/><br/>Feel free to email me if there are any problems, concerns or requests for future updates:<br/><a href='mailto:{{ email }}'>{{ email }}</a><br/><br/>Visit the extensions website for information and future updates:<br/><a href='{{ upload_link }}'>{{ upload_link }}</a><br/><br/>", "About Me", 400);
+      showPopup(true, "<h1>Jobmine Plus Version "+CONSTANTS.VERSION+"</h1><br/>Hey there!<br/><br/>This is Matthew Ng the creator of Jobmine Plus. I am a System Designs Engineering Student at the University of Waterloo. I created this because Jobmine is not user friendly so this addon/extension should speed things up.<br/><br/>Feel free to report an issue if there are any problems:<br/><a href='{{ issues_link }}'>{{ issues_link }}</a><br/><br/>Visit the extensions website for information and future updates:<br/><a href='{{ upload_link }}'>{{ upload_link }}</a><br/><br/>", "About Me", 400);
    });
    header += '</ul></nav><div id="uwBanner" class="banner"></div><a href="' + LINKS.ANDROID_APP + '" target="_blank" class="google_play_button"></a></div><div id="jbmnplsBottomGroup"><div id="jbmnplsStatus"><ul></ul></div><div id="jbmplsControlPanel"><span class="fakeLink" onclick="showSettings();">Settings</span> | <span onclick="showAbout();" class="fakeLink">About</span> | <a href="'+LINKS.LOGOUT+'">Logout</a></div></div></header>';
    $("body").prepend(header);
@@ -609,7 +609,7 @@ function invokeRefreshTimer() {
  */
  function invokeApplyPopup(jobId, title) {
    if (typeof (OBJECTS.UWATERLOO_ID) === "undefined") {
-      alert("Failed to get user id, please report this to {{ email }}.");
+      alert("Failed to get user id, please report this bug: {{ issues_link }}.");
       return;
    }
    title = title || "Submit Application";
